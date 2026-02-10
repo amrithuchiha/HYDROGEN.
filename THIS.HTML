@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Last Page</title>
+  <style>
+    /* RESET */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Georgia", serif;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at top, #1a1a1a, #000);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    /* FINAL TEXT */
+    .final-text {
+      position: relative;
+      z-index: 10;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+      opacity: 0;
+      animation: fadeIn 3s ease forwards;
+      animation-delay: 1s;
+      text-align: center;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* PETALS */
+    .petal {
+      position: absolute;
+      top: -10%;
+      width: 18px;
+      height: 18px;
+      background: rgba(255, 200, 220, 0.35);
+      border-radius: 60% 40% 60% 40%;
+      filter: blur(0.8px);
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(80px) translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FINAL TEXT -->
+  <div class="final-text">
+    And some feelings…<br>
+    are meant to stay unspoken.
+  </div>
+
+  <!-- AUDIO -->
+  <audio id="bgm" src="Un-Vizhigalil.mp3"></audio>
+
+  <script>
+    /* ===== MUSIC CONTROL ===== */
+    const audio = document.getElementById("bgm");
+
+    // Start & end time (in seconds)
+    const startTime = 60;   // 1:00
+    const endTime   = 108;  // 1:48
+
+    audio.volume = 0.35;
+
+    // Browser autoplay fix: start on first interaction
+    document.body.addEventListener("click", () => {
+      audio.currentTime = startTime;
+      audio.play();
+    }, { once: true });
+
+    // Stop music exactly at 1:48
+    audio.addEventListener("timeupdate", () => {
+      if (audio.currentTime >= endTime) {
+        audio.pause();
+        audio.currentTime = endTime;
+      }
+    });
+
+    /* ===== PETAL GENERATOR ===== */
+    function createPetal() {
+      const petal = document.createElement("div");
+      petal.className = "petal";
+
+      petal.style.left = Math.random() * 100 + "vw";
+      petal.style.animationDuration = (8 + Math.random() * 6) + "s";
+      petal.style.animationDelay = Math.random() * 5 + "s";
+      petal.style.transform = `scale(${0.6 + Math.random() * 0.6})`;
+
+      document.body.appendChild(petal);
+
+      // Remove after animation
+      setTimeout(() => {
+        petal.remove();
+      }, 15000);
+    }
+
+    // Continuous soft petals
+    setInterval(createPetal, 600);
+  </script>
+
+</body>
+</html>
